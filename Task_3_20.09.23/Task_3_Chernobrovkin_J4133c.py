@@ -64,7 +64,7 @@ for i in range(num+1):
     #     break
     # w = w2
     # b = b2
-    
+GD_lin = w * x + b
 fig, axs = plt.subplots(figsize = (10, 8), dpi=300)
 axs.scatter(x, y, label="Data")
 axs.plot(x, w * x + b, 'r', label="Gradient Descent")
@@ -108,7 +108,7 @@ for i in range(num+1):
     #     break
     # w = w2
     # b = b2
-
+GD_rat = w / (1 + b * x)
 fig, axs = plt.subplots(figsize = (10, 8), dpi=300)
 axs.scatter(x, y, label="Data")
 axs.plot(x, w / (1 + b * x), 'r', label="Gradient Descent") 
@@ -134,7 +134,7 @@ print('Conjugate Gradient Descent (linear approximant)')
 CGD = minimize(linear, [1., 1.], method='CG', options={'xtol':1e-3, 'disp':True})
 w, b = CGD.x
 axs.scatter(x, y, label="Data")
-# CGD_linear = CGD.x
+CGD_lin = w * x + b
 axs.plot(x, w * x + b, 'r', label="Conjugate Gradient Descent")
 axs.set_title('linear approximation')
 plt.legend(fontsize=14)
@@ -289,7 +289,7 @@ for lst2 in lst:
 p = []
 for i in range(len(x)):
     p.append(x[i]*a + b)
-
+exh_lin = p
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
 plt.title("Linear", fontsize=14)
 axs.scatter(x, y, label="Data")
@@ -323,7 +323,7 @@ for sublist in list2:
 p = []
 for i in range(len(x)):
     p.append(a/(1 + b * x[i]))
-
+exh_rat = p
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
 plt.title("Rational", fontsize=14)
 axs.scatter(x, y, label="Data")
@@ -375,7 +375,7 @@ while True:
 p = []
 for i in range(len(x)):
     p.append(x[i]*a1 + b1)
-
+gauss_lin = p
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
 plt.title("Linear", fontsize=14)
 axs.scatter(x, y, label="Data")
@@ -424,7 +424,7 @@ while True:
 p = []
 for i in range(len(x)):
     p.append(a1/(1 + b1 * x[i]))
-    
+gauss_rat = p
 print('Gauss  method (rational approximant): a =', a, ', b =', b, ', f-calculations =', f_clc, 'N =', cnt)
 
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
@@ -450,7 +450,7 @@ r = minimize(fcn,[1, 0.5], method='nelder-mead', options={'xatol': e,'disp': Tru
 p = []
 for i in range(len(x)):
     p.append(r.x[0] * x[i] + r.x[1])
-
+NM_lin = p
 print ('Nelder-Mead (linear function): [a, b] =', r.x)
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
 plt.title("Linear", fontsize=14)
@@ -477,7 +477,7 @@ nm_rat = result.x
 p = []
 for i in range(len(x)):
     p.append(result.x[0] / (1 + result.x[1] * x[i]))
-
+NM_rat = p
 print ('Nelder-Mead (rational approximant): [a, b] =', result.x)
 fig, axs = plt.subplots(figsize=(10,8), dpi=300)
 plt.title("Rational", fontsize=14)
@@ -485,4 +485,37 @@ axs.scatter(x, y, label="Data")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.plot(x, p, 'g', label="Nelder-Mead")
+plt.legend(fontsize=14)
+
+
+
+
+
+plt.figure(figsize=(10,7), dpi=300)
+plt.title("Linear", fontsize=14)
+plt.plot(x, y, '.b', label="Data")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.plot(x, GD_lin, 'g', label="Gradient Descent")
+plt.plot(x, CGD_lin, 'r', label="Conjugate Gradient")
+plt.plot(x, Newton_linear[0]*x + Newton_linear[1], 'y', label="Newton")
+plt.plot(x, lma_linear[0]*x + lma_linear[1], 'm', label="Levenberg-Marquardt")
+plt.plot(x, exh_lin, 'black', label="Exhaustive")
+plt.plot(x, gauss_lin, 'orange', label="Gauss")
+plt.plot(x, NM_lin, 'lime', label="Nelder-Mead")
+plt.legend(fontsize=14)
+
+
+plt.figure(figsize=(10,7), dpi=300)
+plt.title("Rational", fontsize=14)
+plt.plot(x, y, '.b', label="Data")
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.plot(x, GD_rat, 'g', label="Gradient Descent")
+plt.plot(x, CGD_rat[0] /(1 + CGD_rat[1]*x), 'r', label="Conjugate Gradient")
+plt.plot(x, Newton_rat[0] / (1 + Newton_rat[1]*x), 'y', label="Newton")
+plt.plot(x, lma_rat[0] / (1 + lma_rat[1]*x), 'm', label="Levenberg-Marquardt")
+plt.plot(x, exh_rat, 'black', label="Exhaustive")
+plt.plot(x, gauss_rat, 'orange', label="Gauss")
+plt.plot(x, NM_rat, 'lime', label="Nelder-Mead")
 plt.legend(fontsize=14)
